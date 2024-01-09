@@ -3,9 +3,13 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
     private JButton startButton, restartButton, betButton, foldButton, callButton, raiseButton, checkButton;
+    private JLabel creditsLabel;
 
     public GamePanel() {
         setLayout(new BorderLayout());
+
+        // Üst paneldeki butonları ve kredi bilgisini içerecek yeni bir panel
+        JPanel topContainer = new JPanel(new BorderLayout());
 
         // Üst panel, start ve restart butonları için
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Aralarında 10px boşluk
@@ -19,6 +23,16 @@ public class GamePanel extends JPanel {
         topPanel.add(startButton);
         topPanel.add(restartButton);
 
+        // Üst paneli topContainer içine ekleme
+        topContainer.add(topPanel, BorderLayout.CENTER);
+
+        // Kredi bilgisini gösteren JLabel oluşturma ve topContainer'a ekleme
+        creditsLabel = new JLabel("Credits: 200");
+        topContainer.add(creditsLabel, BorderLayout.SOUTH);
+
+        // Üst konteyneri GamePanel'e ekleme
+        add(topContainer, BorderLayout.NORTH);
+
         // Alt panel, oyuncu aksiyon butonları için
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
         betButton = new JButton("Bet");
@@ -27,6 +41,8 @@ public class GamePanel extends JPanel {
         raiseButton = new JButton("Raise");
         checkButton = new JButton("Check");
 
+        add(bottomPanel, BorderLayout.SOUTH);
+
         // Aksiyon butonlarını alt panele ekleme
         bottomPanel.add(betButton);
         bottomPanel.add(foldButton);
@@ -34,15 +50,18 @@ public class GamePanel extends JPanel {
         bottomPanel.add(raiseButton);
         bottomPanel.add(checkButton);
 
-        // Üst ve alt panelleri GamePanel'e ekleme
-        add(topPanel, BorderLayout.NORTH);
-        add(bottomPanel, BorderLayout.SOUTH);
-
         // Merkez alan, masa kartları için
         JPanel tablePanel = new JPanel();
         // Masa kartlarını göstermek için özel kod
         // ...
 
         add(tablePanel, BorderLayout.CENTER);
+    }
+
+    // Kredi bilgisini güncelleyen metod
+    public void updateCreditsDisplay(int credits) {
+        creditsLabel.setText("Credits: " + credits); // Kredi bilgisini güncelle
+        this.revalidate(); // Arayüzü güncelle
+        this.repaint(); // Arayüzü yeniden çiz
     }
 }
