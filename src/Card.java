@@ -1,5 +1,6 @@
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import java.io.File;
 
 public class Card {
 
@@ -16,7 +17,7 @@ public class Card {
     private final int suit; // Bu kartın takımı, SPADES, HEARTS, DIAMONDS veya CLUBS olabilir.
     private final int value; // Kartın değeri. Normal bir kart için bu 1 ile 13 arasında olabilir.
 
-    private final Icon icon; // Kartın görselini tutar.
+    private ImageIcon icon;
 
     public Card(int theValue, int theSuit) {
         if (theSuit != SPADES && theSuit != HEARTS && theSuit != DIAMONDS &&
@@ -34,7 +35,20 @@ public class Card {
             case SPADES: iconFilename += "s.jpg"; break;
             case HEARTS: iconFilename += "h.jpg"; break;
         }
-        icon = new ImageIcon(getClass().getResource(iconFilename));
+
+        // Dosya yolunu doğrudan kullanarak ImageIcon nesnesi oluştur
+        try {
+            File imageFile = new File(iconFilename);
+            if(imageFile.exists()) { // Dosyanın varlığını kontrol et
+                icon = new ImageIcon(imageFile.getAbsolutePath());
+            } else {
+                System.err.println("Dosya bulunamadı: " + imageFile.getAbsolutePath());
+                icon = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            icon = null;
+        }
     }
 
     public int getSuit() {
@@ -77,8 +91,17 @@ public class Card {
         return getValueAsString() + " of " + getSuitAsString();
     }
 
-    public Icon getIcon() {
+    public ImageIcon getIcon() {
         return icon;
     }
 
+    // Kartın görsel dosya adını döndüren metod
+    public String getImageName() {
+        // Kartın tipini ve değerini kullanarak dosya adını oluştur
+        String valueName = this.value == 1 ? "1" : Integer.toString(this.value); // As için "1"
+        char suitInitial = Character.toLowerCase(getSuitAsString().charAt(0)); // Takımın ilk harfi
+
+        // Dosya adını oluştur (örneğin: "1d.jpg" A diamonds için, "13h.jpg" King of hearts için)
+        return "Cards/" + valueName + suitInitial + ".jpg";
+    }
 } // end class Card

@@ -16,19 +16,19 @@ public class GameLogic {
         deck = new Deck(); // Yeni bir desteyi karıştırarak başlat
         deck.shuffle();
 
-        playerHand = new Hand(); // Oyuncu ve rakip için eller
-        opponentHand = new Hand();
-        communityCards = new ArrayList<>();
+        player = new Player(); // Oyuncu ve rakip nesnelerini başlat
+        opponent = new Player();
+
+        playerHand = player.getHand(); // Oyuncu ve rakip için elleri ayarla
+        opponentHand = opponent.getHand();
 
         dealInitialCards(); // Başlangıç kartlarını dağıt
 
-        player = new Player();
-        opponent = new Player();
         isPlayerTurn = true; // Oyun başlangıcında sıra oyuncuda
     }
 
     // Başlangıç kartlarını dağıtan metod
-    private void dealInitialCards() {
+    void dealInitialCards() {
         for (int i = 0; i < 2; i++) { // Her oyuncuya iki kart dağıt
             playerHand.addCard(deck.dealCard());
             opponentHand.addCard(deck.dealCard());
@@ -145,6 +145,16 @@ public class GameLogic {
                 return Winner.TIE; // Beraberlik
             }
         }
+    }
+
+    // Oyuncunun elini döndüren metod
+    public Hand getPlayerHand() {
+        return player.getHand();
+    }
+
+    // Rakibin elini döndüren metod
+    public Hand getOpponentHand() {
+        return opponent.getHand();
     }
     // Diğer gerekli metodlar ve oyun mantığı...
 }
